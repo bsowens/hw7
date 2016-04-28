@@ -24,20 +24,50 @@ def karmarkar_karp(l):
     # the result should be the residue. Switch negative sign back.
     return heapq.heappop(heap) * -1
 
+def randSet():
+    test_list = []
+    rand = []
+    for i in range(0,100):
+        rand.append(random.randint(1,pow(10,12)))
+    return rand
+
+def generatePosOrNeg():
+    val = random.randint(1, 2)
+    if (val == 1):
+        return 1
+    else:
+        return -1
+
+def repeated_random(k):
+    best_res = []
+    for on_list in range(0,50):
+        l = randSet()
+        for j in range(0,k):
+            best_so_far = 99999999999
+            for i in range(0,100):
+                l[i] = generatePosOrNeg()*l[i]
+            residue = abs(sum(l))
+            if residue < best_so_far:
+                best_so_far = residue
+            
+
+        best_res.append(residue)
+        
+    return best_res
 
 
-
-def repeated_random(l,k):
-    n = len(l)
-    best_residue = pow(10,14)*2
+        
+'''
     for i in range(0,k):
         for j in range(0,n):
-            l[j] = random.choice([1, -1])*l[j]
+            l[j] = generatePosOrNeg()*l[j]
         residue = abs(sum(l))
         if residue < best_residue:
-            best_residue = residue
-    return best_residue
 
+            best_residue = residue
+
+    return best_residue
+'''
 
 def residue(sol,l):
     return abs(sum([a*b for a,b in zip(sol, l)]))
@@ -101,15 +131,6 @@ def simulated_annealing(l,k):
             residue1 = residue(solution1,l)
     return solution1
 
-def randSets():
-    test_list = []
-    rand = []
-    for i in range(0,50):
-        for i in range(0,100):
-            rand.append(random.randint(1,pow(10,12)))
-        test_list.append(rand)
-    return test_list
-
 
 def testKK():
     rand = randSets()
@@ -125,12 +146,11 @@ def testCases():
     saResult = []
     for i in range(0,len(rand)):
 
-        rrResult.append(repeated_random(rand[i],250))
+        rrResult.append(repeated_random(rand[i],5))
         #print('rr done at ',i)
         #gdResult.append(gradient_descent(rand[i],250))
         #print('gd done at ',i)
         #saResult.append(simulated_annealing(rand[i],5))
-    return rrResult
 
 
 
