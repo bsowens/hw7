@@ -24,34 +24,28 @@ def karmarkar_karp(l):
     # the result should be the residue. Switch negative sign back.
     return heapq.heappop(heap) * -1
 
-def min_finder(l):
-    min_val = min(l)
-    min_idx = l.index(min_val)
-    return min_idx
+
+
 
 def repeated_random(l,k):
     n = len(l)
-    solutions = []
-    residues = []
-    randListGen = lambda n: [random.choice([-1,1]) for x in range(0,n)]
+    best_residue = pow(10,14)*2
     for i in range(0,k):
-        solution = randListGen(n)
-        solutions += [solution]
-        residue = abs(sum([a*b for a,b in zip(solution, l)]))
-        residues += [residue]
-    min_res = min_finder(residues)
-    #print(min_res)
-    print(residues[min_res])
-    return solutions[min_res]
-    
-    
+        for j in range(0,n):
+            l[j] = random.choice([1, -1])*l[j]
+        residue = abs(sum(l))
+        if residue < best_residue:
+            best_residue = residue
+    return best_residue
+
+
 def residue(sol,l):
     return abs(sum([a*b for a,b in zip(sol, l)]))
 
 def gradient_descent(l,k):
     n = len(l)
     randListGen = lambda n: [random.choice([-1,1]) for x in range(0,n)]
-    solution1 = randListGen(n)
+    solution1 = [random.choice([-1,1]) for x in range(0,n)]
     residue1 = residue(solution1,l)
     for x in range(0,k):
         i = random.randint(0,n-1)
@@ -64,7 +58,7 @@ def gradient_descent(l,k):
         residue2 = residue(solution2,l)
         if residue2 < residue1:
             solution1 = solution2
-            residue1 = residue(solution1,l)   
+            residue1 = residue(solution1,l)
     return solution1
 
 def temp(i):
@@ -87,7 +81,7 @@ def simulated_annealing(l,k):
     randListGen = lambda n: [random.choice([-1,1]) for x in range(0,n)]
     solution1 = randListGen(n)
     residue1 = residue(solution1,l)
-    for x in range(24900,25000):
+    for x in range(0,25000):
         i = random.randint(0,n-1)
         j = random.randint(0,n-1)
         solution2 = solution1
@@ -101,20 +95,47 @@ def simulated_annealing(l,k):
         print(p)
 
 
-        
+
         if residue2 < residue1:
             solution1 = solution2
-            residue1 = residue(solution1,l)   
+            residue1 = residue(solution1,l)
     return solution1
 
+def randSets():
+    test_list = []
+    rand = []
+    for i in range(0,50):
+        for i in range(0,100):
+            rand.append(random.randint(1,pow(10,12)))
+        test_list.append(rand)
+    return test_list
+
+
+def testKK():
+    rand = randSets()
+    test = []
+    for i in range(0,len(rand)):
+        test.append(karmarkar_karp(rand[i]))
+        return test
+
+def testCases():
+    rand = randSets()
+    rrResult = []
+    gdResult = []
+    saResult = []
+    for i in range(0,len(rand)):
+
+        rrResult.append(repeated_random(rand[i],250))
+        #print('rr done at ',i)
+        #gdResult.append(gradient_descent(rand[i],250))
+        #print('gd done at ',i)
+        #saResult.append(simulated_annealing(rand[i],5))
+    return rrResult
 
 
 
 
 
-
-    
-    
 
 
 
