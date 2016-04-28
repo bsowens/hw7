@@ -45,31 +45,67 @@ def repeated_random(l,k):
     return solutions[min_res]
     
     
-
+def residue(sol,l):
+    return abs(sum([a*b for a,b in zip(sol, l)]))
 
 def gradient_descent(l,k):
     n = len(l)
-    
     randListGen = lambda n: [random.choice([-1,1]) for x in range(0,n)]
     solution1 = randListGen(n)
+    residue1 = residue(solution1,l)
     for x in range(0,k):
-        i = random.randint(0,n)
-        j = random.randint(0,n)
-        residue1 = abs(sum([a*b for a,b in zip(solution1, l)]))
-        print(solution1)
+        i = random.randint(0,n-1)
+        j = random.randint(0,n-1)
         solution2 = solution1
-        solution2[i] = solution2[i] * -1
-        residue2 = abs(sum([a*b for a,b in zip(solution2, l)]))
-        if residue1 > residue2:
-            residue1 = residue2
-        else: residue1=residue1
-        
-        
-        
 
+        solution2[i] = solution2[i] * -1
+
+        solution2[j] = solution2[j] * random.choice([1,-1])
+        residue2 = residue(solution2,l)
+        if residue2 < residue1:
+            solution1 = solution2
+            residue1 = residue(solution1,l)   
+    return solution1
+
+def temp(i):
+    return pow(10,10)*pow(0.8,(i/300))
+
+
+
+#Function for weighted random pick from https://www.safaribooksonline.com/library/view/python-cookbook-2nd/0596007973/ch04s22.html
+
+def random_pick(some_list, probabilities):
+    x = random.uniform(0, 1)
+    cumulative_probability = 0.0
+    for item, item_probability in zip(some_list, probabilities):
+        cumulative_probability += item_probability
+        if x < cumulative_probability: break
+    return item
 
 def simulated_annealing(l,k):
-    pass
+    n = len(l)
+    randListGen = lambda n: [random.choice([-1,1]) for x in range(0,n)]
+    solution1 = randListGen(n)
+    residue1 = residue(solution1,l)
+    for x in range(24900,25000):
+        i = random.randint(0,n-1)
+        j = random.randint(0,n-1)
+        solution2 = solution1
+        solution2[i] = solution2[i] * -1
+        solution2[j] = solution2[j] * random.choice([1,-1])
+        residue2 = residue(solution2,l)
+
+        #Probability of choosing a wrong move:
+        print(residue(solution2,l) - residue(solution1,l))
+        p = math.exp(-( residue(solution2,l) - residue(solution1,l)  ) / temp(x)   )
+        print(p)
+
+
+        
+        if residue2 < residue1:
+            solution1 = solution2
+            residue1 = residue(solution1,l)   
+    return solution1
 
 
 
