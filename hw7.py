@@ -39,38 +39,48 @@ def generatePosOrNeg():
         return -1
 
 def repeated_random(k):
-    best_res = []
+    best_res_set = []
     for on_list in range(0,50):
         l = randSet()
+        best_so_far = 999999999999999
         for j in range(0,k):
-            best_so_far = 99999999999
+            
             for i in range(0,100):
                 l[i] = generatePosOrNeg()*l[i]
             residue = abs(sum(l))
             if residue < best_so_far:
                 best_so_far = residue
-            
+        best_res_set.append(best_so_far)
+    return best_res_set
 
-        best_res.append(residue)
-        
-    return best_res
-
-
-        
-'''
-    for i in range(0,k):
-        for j in range(0,n):
-            l[j] = generatePosOrNeg()*l[j]
-        residue = abs(sum(l))
-        if residue < best_residue:
-
-            best_residue = residue
-
-    return best_residue
-'''
 
 def residue(sol,l):
     return abs(sum([a*b for a,b in zip(sol, l)]))
+
+def gradient_descent1(k):
+    best_res_set = []
+    for on_list in range(0,50):
+        l = randSet()
+        best_so_far = 999999999999999
+        for j in range(0,k):
+            
+            for i in range(0,100):
+                x = random.randint(0,99)
+                y = random.randint(0,99)
+                l[x] = l[x] * -1
+                l[y] = l[y] * random.choice([1,-1])
+            residue = abs(sum(l))
+            #print(residue)
+            if residue < best_so_far:
+                #print(residue, '<', best_so_far)
+                best_so_far = residue
+                
+        best_res_set.append(best_so_far)
+    return best_res_set
+
+
+
+
 
 def gradient_descent(l,k):
     n = len(l)
