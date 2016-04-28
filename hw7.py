@@ -1,6 +1,7 @@
 import math
 import heapq
 import random
+import numpy
 
 # INPUT
 test_list = [10, 8, 7, 6, 5]
@@ -99,7 +100,7 @@ def simulated_annealing(k):
             l[x] = l[x] * -1
             l[y] = l[y] * random.choice([1,-1])
             residue2 = abs(sum(l))
-            p = math.exp(-( residue1 - residue2  ) / temp(j)   )
+            p = numpy.exp(-( residue1 - residue2  ) / temp(j)   )
             randFloat = random.uniform(0,1)
             if residue2 < best_so_far or (randFloat < p and residue2 > best_so_far):
                 best_so_far = residue2
